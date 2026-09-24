@@ -1,3 +1,3 @@
 ;; SPDX-License-Identifier: 0BSD
 
-(print "Compendium Fennel build works.")
+{:message "Fennel la Lua la LuaLaTeX funcționează."}

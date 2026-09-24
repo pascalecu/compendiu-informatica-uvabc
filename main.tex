@@ -1,12 +1,12 @@
 \documentclass{memoir}
 
 \usepackage{fontspec}
-\usepackage{hyperref}
 
 \begin{document}
 
-\chapter{Test}
-
-123 123 123
+\directlua{
+    local compendium = assert(dofile(".build/lua/compendium.lua"))
+    tex.print(compendium.message)
+}
 
 \end{document}
