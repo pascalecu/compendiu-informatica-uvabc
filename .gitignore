@@ -311,6 +311,10 @@ TSWLatexianTemp*
 # glossaries
 *.glstex
 
+main.pdf
+
+.build/
+
 ### Linux ###
 *~
 
