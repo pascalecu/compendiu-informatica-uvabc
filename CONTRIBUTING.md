@@ -1,410 +1,144 @@
 # Contribuții
 
-Contribuțiile la compendiu sînt binevenite, în special corecturile,
-completările, materialele asociate disciplinelor și informațiile privind
-modificările recente ale programei.
+Contribuțiile pot adăuga fie conținut academic, fie date despre programele INFO
+și IAST.
 
-Înainte de modificări structurale semnificative, este recomandată consultarea
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+Înainte de a modifica modelul, citiți
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Pentru date preluate din
+documentele UVABc, consultați și [`docs/SOURCES.md`](docs/SOURCES.md).
 
-## Tipuri de contribuții
+## Conținut academic
 
-Sînt utile în special:
+Compendiul se organizează după subiecte, nu după lista disciplinelor.
 
-* corectarea greșelilor de conținut;
-* corectarea greșelilor de redactare;
-* completarea unor explicații;
-* exemple suplimentare;
-* exerciții și probleme;
-* implementări;
-* figuri și diagrame;
-* actualizarea informațiilor curriculare;
-* semnalarea unor discipline sau teme lipsă;
-* bibliografie și surse relevante.
-
-## Organizarea conținutului
-
-Conținutul academic este organizat pe domenii, nu după program, an sau semestru.
-
-De exemplu:
-
-```text
-content/
-├── algorithms-theory/
-├── artificial-intelligence/
-├── mathematics/
-├── optimization/
-└── systems/
-```
-
-Dacă un subiect este utilizat de mai multe discipline, acesta trebuie, pe cît
-posibil, tratat o singură dată și referențiat din celelalte locuri.
-
-Nu copiați același material în mai multe capitole doar pentru a reproduce
-structura unor cursuri diferite.
-
-## Adăugarea unui capitol
-
-Un capitol nou necesită:
-
-1. definirea sa în catalogul Fennel;
-2. asocierea cu un domeniu;
-3. crearea fișierului LaTeX corespunzător;
-4. definirea eventualelor prerechizite;
-5. asocierea cu disciplinele relevante, dacă este cazul.
-
-Conceptual:
+Dacă aceeași noțiune apare în mai multe discipline, ea se explică o singură dată
+și se leagă de toate disciplinele relevante.
 
 ```clojure
-(chapter neural-networks
-  "Rețele neuronale"
-
-  (domain artificial-intelligence)
-
-  (requires
-    calculus
-    linear-algebra
-    probability
-    machine-learning))
+(topic recurrent-neural-networks
+  {:title "Rețele neuronale recurente"
+   :file "content/artificial-intelligence/recurrent-neural-networks.tex"
+   :requires [neural-networks]})
 ```
 
-Fișierul asociat va fi dedus din domeniu și identificator, de exemplu:
+`requires` exprimă o dependență conceptuală între topicuri. Precondițiile
+dintr-o fișă de disciplină pot ajuta la stabilirea acestor relații, dar nu se
+copiază automat.
 
-```text
-content/artificial-intelligence/neural-networks.tex
-```
+Ordinea cărții este definită explicit prin `domain.topics` și `topic.children`.
 
-Identificatorul unui capitol trebuie considerat stabil. Nu modificați
-identificatorul doar pentru a reflecta o schimbare de titlu.
+## Discipline
 
-## Adăugarea unei discipline
-
-Disciplinele universitare sînt definite separat de capitole și de planurile de
-învățămînt.
-
-Exemplu:
+`course` reprezintă disciplina ca identitate. Anul, semestrul, creditele și
+celelalte date ale unei apariții concrete stau în `course-entry`.
 
 ```clojure
-(course retele-neuronale
-  "Rețele neuronale. Aplicații"
+(course operating-systems
+  {:title "Sisteme de operare"
+   :topics
+   {:primary
+    [operating-systems processes filesystems]
 
-  (scope core)
-
-  (assumes
-    machine-learning)
-
-  (covers
-    (primary neural-networks)
-    (supporting optimization)))
+    :secondary
+    [computer-architecture]}})
 ```
 
-Nu creați automat un capitol nou pentru fiecare disciplină.
+`primary` și `secondary` sînt clasificări editoriale ale compendiului, nu
+cîmpuri publicate de UVABc.
 
-O disciplină trebuie asociată materialului conceptual deja existent ori de cîte
-ori acest lucru este posibil.
+Ele pot fi propuse pornind de la fișa disciplinei. Temele tratate direct și
+suficient de amplu sînt candidați buni pentru `primary`; prerechizitele,
+noțiunile auxiliare și legăturile cu alte domenii pot ajunge în `secondary`.
 
-Anul, semestrul și numărul de credite nu se declară în `course`. Acestea aparțin
-unei versiuni concrete a planului de învățămînt.
+Conținuturile fișei sînt sursa principală pentru această mapare. Obiectivele,
+precondițiile și rezultatele învățării pot fi folosite ca indicii suplimentare.
 
-## Asocierea unei discipline cu un plan de învățămînt
+O sugestie generată automat trebuie verificată înainte de a fi introdusă în
+datele canonice.
 
-Poziția unei discipline este declarată în `curriculum`.
+## Curriculum
 
-De exemplu:
+Fiecare program are un curriculum canonic folosit de compendiu, dar acesta poate
+fi construit din mai multe documente.
+
+Nu completați datele unei cohorte cu valori luate din planul altei cohorte doar
+pentru a umple un cîmp lipsă.
+
+`course-entry`, `elective-group` și `finalization` fac parte dintr-un curriculum
+și nu au registre globale proprii.
+
+## Opționale
+
+Un `elective-group` păstrează variantele disponibile și, dacă structura anuală
+publică această informație, varianta aleasă.
 
 ```clojure
-(curriculum info-2025
-  (programme info)
-  (academic-year "2025–2026")
-  (years 3)
-  (source info-plan-2025)
-
-  (year 1
-    (semester 2
-      (required
-        (course structuri-date
-          (credits 5))
-
-        (course algoritmi-fundamentali
-          (credits 5))))))
+(elective-group
+  {:choose 1
+   :options
+   [software-testing
+    cloud-computing
+    special-web-engineering]
+   :selected software-testing})
 ```
 
-Această separare permite păstrarea mai multor versiuni ale planurilor de
-învățămînt fără duplicarea disciplinelor.
+`selected` nu înlocuiește `options`. Lista variantelor și alegerea pentru anul
+universitar respectiv pot proveni din surse diferite.
 
-## Discipline opționale
+## Fișe de disciplină
 
-Disciplinele care formează un grup de alegere trebuie reprezentate explicit ca
-grup.
+Un `syllabus` reprezintă o fișă concretă a unei discipline într-un anumit an
+universitar.
 
-Exemplu:
+Valorile care repetă informații din curriculum pot fi păstrate sub `reported`
+atunci cînd vrem să le comparăm cu cele din plan:
 
 ```clojure
-(elective-group software-or-ml
-  (choose 1)
-
-  (course software-engineering
-    (credits 4))
-
-  (course machine-learning
-    (credits 4)))
+:reported
+{:credits 4
+ :requirement "DI"
+ :assessment "E"}
 ```
 
-Nu transformați un grup de alegere într-o simplă listă de discipline
-independente dacă planul de învățămînt stabilește o relație între ele.
+Forma raportată de sursă se păstrează chiar dacă proiectul folosește intern o
+valoare normalizată.
 
-## Discipline facultative
+Nu este nevoie să modelăm în profunzime fiecare formulare administrativă.
+Textele lungi pot rămîne texte, iar structurile mai detaliate se introduc numai
+acolo unde sînt utile compendiului.
 
-Disciplinele facultative sînt declarate separat:
+## Profesori
+
+Profesorii se declară separat:
 
 ```clojure
-(facultative
-  (course foreign-language
-    (credits 2)))
+(teacher gloria-cerasela-crisan
+  {:name "Gloria-Cerasela Crișan"
+   :position :associate-professor
+   :doctorate :doctor
+   :habilitation true})
 ```
 
-Ele pot apărea în harta curriculară chiar dacă nu primesc conținut propriu în
-compendiu.
+Titulatura poate fi generată din aceste cîmpuri. Dacă este important să păstrăm
+exact titulatura publicată într-o anumită fișă, aceasta poate avea local un
+`reported-title`.
 
-## `scope`
+Profesorii se leagă de fișele disciplinelor, nu direct de `course`, deoarece
+titularii se pot schimba de la un an universitar la altul.
 
-Rolul unei discipline în compendiu este descris prin `scope`.
+## Build și validare
 
-Valorile utilizate sînt:
-
-* `core` — disciplina contribuie direct la conținutul principal;
-* `supporting` — disciplina are un rol complementar;
-* `curriculum-only` — disciplina este păstrată în harta curriculară, fără
-  obligația de a avea conținut propriu.
-
-Exemplu:
-
-```clojure
-(course educatie-fizica-1
-  "Educație fizică I"
-  (scope curriculum-only))
-```
-
-## Relațiile dintre discipline și capitole
-
-Sînt utilizate două mecanisme diferite:
-
-```text
-covers
-assumes
-```
-
-### `covers`
-
-`covers` descrie materialul efectiv tratat de o disciplină.
-
-Sînt utilizate două niveluri:
-
-* `primary` — material central;
-* `supporting` — material relevant, dar secundar.
-
-Exemplu:
-
-```clojure
-(covers
-  (supporting graph-algorithms)
-
-  (primary
-    combinatorial-optimization
-    heuristics
-    metaheuristics))
-```
-
-### `assumes`
-
-`assumes` descrie materialul pe care disciplina îl presupune deja cunoscut.
-
-Exemplu:
-
-```clojure
-(assumes
-  graph-theory
-  complexity)
-```
-
-Nu utilizați `covers` pentru a reprezenta prerechizite.
-
-## Prerechizitele capitolelor
-
-Relația conceptuală dintre capitole este declarată prin `requires`.
-
-Exemplu:
-
-```clojure
-(chapter neural-networks
-  "Rețele neuronale"
-
-  (domain artificial-intelligence)
-
-  (requires
-    calculus
-    linear-algebra
-    probability
-    machine-learning))
-```
-
-`requires` și `assumes` au roluri diferite:
-
-```text
-requires
-    relație conceptuală între capitole
-
-assumes
-    material presupus de o disciplină
-```
-
-## Actualizarea planurilor de învățămînt
-
-Nu modificați o versiune istorică a unui plan pentru a o face să corespundă unei
-versiuni noi.
-
-Dacă structura programului se modifică semnificativ, trebuie adăugat un nou
-`curriculum`.
-
-De exemplu:
-
-```clojure
-(curriculum info-2023 ...)
-(curriculum info-2025 ...)
-```
-
-Acest lucru permite păstrarea structurii specifice fiecărei cohorte.
-
-## Sursele informațiilor curriculare
-
-Fiecare plan de învățămînt trebuie, pe cît posibil, asociat unei surse.
-
-Exemplu:
-
-```clojure
-(source info-plan-2025
-  (title "Plan de învățămînt — Informatică")
-  (institution
-    "Universitatea „Vasile Alecsandri” din Bacău")
-  (academic-year "2025–2026")
-  (url "..."))
-```
-
-Nu introduceți sau modificați informații curriculare pe baza presupunerilor
-atunci cînd o sursă oficială poate fi verificată.
-
-## Stilul conținutului
-
-Materialul trebuie să urmărească, pe cît posibil:
-
-* notație consecventă;
-* formulări clare;
-* definiții înaintea utilizării conceptelor;
-* exemple după introducerea noțiunilor importante;
-* referințe către materialul deja tratat în locul duplicării;
-* separarea clară dintre materia curriculară și completările suplimentare.
-
-## Cod sursă
-
-Exemplele de cod trebuie, atunci cînd este practic, păstrate în fișiere separate
-și incluse în document.
-
-De exemplu:
-
-```text
-examples/
-└── algorithms/
-    └── dijkstra.cpp
-```
-
-Astfel, codul prezentat în PDF poate fi verificat și compilat independent.
-
-Codul original al proiectului este disponibil sub licența 0BSD, dacă nu este
-specificat altfel.
-
-În fișierele proprii poate fi folosit:
-
-```text
-SPDX-License-Identifier: 0BSD
-```
-
-## Materiale externe
-
-Nu presupuneți că un material primit de la un student, profesor sau găsit online
-poate fi redistribuit liber.
-
-Atunci cînd materialul nu este original:
-
-* indicați sursa;
-* păstrați informațiile privind autorul;
-* verificați licența sau permisiunea de utilizare;
-* nu relicențiați materialul sub licențele proiectului dacă nu aveți dreptul să
-  faceți acest lucru.
-
-Materialele originale ale compendiului sînt licențiate conform informațiilor din
-`README.md`.
-
-## Bibliografie
-
-Sursele bibliografice trebuie introduse în bibliografia proiectului și citate
-din document.
-
-Se preferă sursele primare și documentațiile oficiale atunci cînd acestea
-există.
-
-## Teste
-
-Modificările DSL-ului, macro-urilor sau validatorului trebuie însoțite, atunci
-cînd este relevant, de teste.
-
-Structura testelor este:
-
-```text
-tests/
-├── macros/
-├── validation/
-└── fixtures/
-    ├── valid/
-    └── invalid/
-```
-
-Exemple de cazuri care trebuie testate:
-
-* identificatori duplicați;
-* referințe către entități inexistente;
-* ani și semestre invalide;
-* grupuri de opționale invalide;
-* prerechizite inexistente;
-* cicluri între prerechizite;
-* expandarea corectă a macro-urilor.
+Modificările datelor trebuie să treacă validarea, iar schimbările care afectează
+randarea trebuie verificate și prin build-ul documentului.
 
 ## Commit-uri
 
-Repository-ul folosește convenția Conventional Commits.
-
-Exemple:
+Folosim Conventional Commits, cu mesaje în engleză:
 
 ```text
-feat(ai): add neural network introduction
-feat(algorithms): add Dijkstra algorithm
-feat(curriculum): add 2025 INFO curriculum
-fix(calculus): correct derivative example
-fix(curriculum): correct elective group
-docs: update architecture documentation
-refactor: simplify curriculum model
-style: adjust chapter typography
-build: add Fennel compilation step
-test: add curriculum validation cases
+feat(curriculum): add current INFO year two
+feat(syllabus): add operating systems syllabus
+feat(teachers): add INFO teaching staff
+fix(curriculum): correct IAST elective selection
+docs: simplify architecture documentation
 ```
-
-Mesajele de commit sînt scrise în limba engleză.
-
-## Licențiere
-
-Prin contribuirea de material original la proiect, contribuitorul trebuie să
-accepte distribuirea acestuia sub licența aplicabilă tipului de material:
-
-* CC BY 4.0 pentru text, explicații, exerciții și ilustrații;
-* 0BSD pentru cod și alte componente software.
-
-Materialele terților nu sînt acoperite automat de aceste licențe.

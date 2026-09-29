@@ -1,234 +1,137 @@
 # Compendiu de informatică - UVABc
 
-Compendiu de studiu în curs de dezvoltare, construit pornind de la disciplinele
-programelor de Informatică - licență și Informatică Aplicată în Știință și
-Tehnologie (IAST) - master de la Universitatea „Vasile Alecsandri” din Bacău.
+Acest repository conține un compendiu construit în jurul programelor de
+Informatică și Informatică Aplicată în Științe și Tehnologie (IAST) de la
+Universitatea „Vasile Alecsandri” din Bacău.
 
-Scopul proiectului este reunirea într-un singur document a noțiunilor studiate
-în cadrul celor două programe și organizarea lor într-o structură coerentă pe
-domenii ale informaticii.
+Compendiul este un proiect independent; nu este un suport de curs oficial și nu
+este afiliat Universității „Vasile Alecsandri” din Bacău.
 
-Materia este completată, acolo unde este util, cu explicații suplimentare,
-demonstrații, exemple, exerciții, algoritmi, implementări, observații proprii și
-subiecte care reprezintă o continuare firească a celor întîlnite în programa
-universitară.
+Scopul nu este să copiem planurile de învățămînt sau fișele disciplinelor, ci să
+adunăm materia într-o carte coerentă. Universitatea organizează materia în
+discipline, ani și semestre; compendiul o organizează după idei, noțiuni și
+legăturile dintre ele.
 
-Compendiul este un material personal de studiu și referință. Nu reprezintă un
-suport de curs oficial și nu este afiliat oficial Universității „Vasile
-Alecsandri” din Bacău.
-
-> [!NOTE]
->
-> Compendiul folosește în textul original grafia cu „î” și în interiorul
-> cuvintelor, neadoptînd reintroducerea generală a lui „â” stabilită prin
-> reforma ortografică din 1993.
->
-> În celelalte privințe, sînt urmate modificările și recomandările ortografice
-> ulterioare, în măsura în care acestea nu depind de această convenție.
->
-> Denumirile oficiale, citatele, titlurile lucrărilor și alte fragmente
-> reproduse din surse externe își păstrează grafia originală.
-
-## Organizare
-
-Compendiul nu reproduce împărțirea administrativă a materiei pe ani și semestre.
-Conținutul este organizat pe domenii, iar disciplinele universitare sînt
-asociate capitolelor corespunzătoare.
-
-Structura urmărită este, în linii mari:
+De aici apar cele două perspective ale proiectului:
 
 ```text
-Compendiu de informatică
-├── Fundamente matematice și modelare
-├── Fundamentele programării și limbaje
-├── Algoritmi și teoria calculului
-├── Date și sisteme informaționale
-├── Sisteme de calcul și comunicații
-├── Inginerie software și aplicații
-├── Inteligență artificială
-├── Optimizare și cercetări operaționale
-├── Geometrie, grafică și tehnologii imersive
-├── Securitate informatică
-├── Cercetare și practică academică
-├── Didactica informaticii și științele educației
-└── Competențe profesionale complementare
+cartea
+domain → topic → topic
+
+universitatea
+programme → curriculum → course
+                         │
+                         └── topics → topic
 ```
 
-Această organizare permite tratarea continuă a unui subiect chiar atunci cînd
-acesta este distribuit între mai multe discipline sau este reluat la niveluri
-diferite în cadrul licenței și masterului.
+Un `topic` nu este același lucru cu un `course`. „Sisteme de operare” și „Rețele
+neuronale. Aplicații”, de exemplu, sînt discipline din planurile de învățămînt.
+Conținuturile acestor discipline pot fi descompuse în topicuri mai mici, pe baza
+fișelor disciplinelor. O disciplină poate acoperi mai multe topicuri, iar
+același topic poate apărea în mai multe discipline.
 
-De exemplu:
+## Clonare
+
+Repository-ul conține linkuri simbolice, folosite în special pentru
+[`sources/uvabc/latest`](sources/uvabc/latest).
+
+Pe Linux și macOS nu este necesară, în mod normal, nicio configurare
+suplimentară. Pe Windows este recomandată activarea **Developer Mode** și a
+suportului Git pentru linkuri simbolice înainte de clonare:
+
+```powershell
+git config --global core.symlinks true
+```
+
+Repository-ul poate fi apoi clonat în mod obișnuit.
+
+Dacă linkurile simbolice nu pot fi create, restul repository-ului rămîne
+utilizabil, dar `sources/uvabc/latest` poate fi extras ca fișier obișnuit în
+locul unui link simbolic.
+
+Detalii despre organizarea arhivei se găsesc în
+[`sources/uvabc/README.md`](sources/uvabc/README.md).
+
+## Sursele universitare
+
+Datele despre programele INFO și IAST provin din documentele publicate de
+Universitatea „Vasile Alecsandri” din Bacău, în principal planuri de învățămînt,
+structuri anuale și fișe ale disciplinelor.
+
+Copii ale documentelor folosite de proiect sînt arhivate în
+[`sources/uvabc/`](sources/uvabc/), organizate după anul universitar.
+[`sources/uvabc/latest`](sources/uvabc/latest) indică spre cel mai recent set
+arhivat în repository; nu înseamnă neapărat anul universitar aflat în curs.
+
+Documentele nu descriu întotdeauna aceeași cohortă. Un plan valabil începînd cu
+anul I al unui anumit an universitar nu trebuie folosit automat pentru a descrie
+anii superiori aflați deja în desfășurare.
+
+Detaliile despre surse, cohorte și documentele folosite se găsesc în
+[`docs/SOURCES.md`](docs/SOURCES.md).
+
+## Ce păstrăm
+
+Modelul poate păstra mai multe informații decît ajung efectiv în carte: credite,
+ore, coduri, regimul disciplinei, profesori, conținuturile fișei, bibliografia,
+rezultatele învățării și alte date publicate de UVABc.
+
+Asta nu înseamnă că fiecare asemenea cîmp trebuie să primească un subsistem
+propriu. Datele administrative pe care doar vrem să le păstrăm pot rămîne
+structuri simple și opționale.
+
+Partea importantă pentru compendiu este relația dintre:
 
 ```text
-Structuri de date
-        ↓
-Algoritmi fundamentali
-        ↓
-Grafuri
-        ↓
-Cercetări operaționale
-        ↓
-Optimizare combinatorie
-        ↓
-Eficiență și optimizare
+course
+  ↕
+topic
 ```
 
-sau:
+și conținutul din fișele disciplinelor, care ne ajută să stabilim ce merită
+acoperit în carte.
+
+## Fennel și LuaLaTeX
+
+Arhitectura țintă folosește Fennel pentru date, validare și generare, iar
+LuaLaTeX pentru carte.
+
+Fluxul urmărit este:
 
 ```text
-Probabilități și statistică
-            ↓
-Inteligență artificială
-            ↓
-Învățare automată
-            ↓
-Rețele neuronale
-            ↓
-Aplicații ale inteligenței artificiale
+date Fennel
+    ↓
+normalizare
+    ↓
+validare
+    ↓
+indexuri și interogări
+    ↓
+TeX generat
+    ↓
+LuaLaTeX
+    ↓
+PDF
 ```
 
-## Legătura cu programa universitară
+Codul Fennel este împărțit intenționat în module specializate. Nu urmărim să
+avem cît mai puține fișiere; urmărim ca fiecare fișier să aibă o
+responsabilitate clară.
 
-Legătura cu planurile de învățămînt este păstrată explicit.
+## Ortografie
 
-O disciplină poate corespunde mai multor capitole ale compendiului, iar același
-capitol poate fi relevant pentru mai multe discipline.
-
-De exemplu, materialul despre rețele neuronale poate fi asociat cu discipline
-precum:
-
-* Informatică - Inteligență artificială;
-* Informatică - Învățare automată;
-* IAST - Rețele neuronale. Aplicații;
-* IAST - Aplicații ale Inteligenței Artificiale.
-
-Documentul va conține și o hartă curriculară prin care materialul poate fi
-parcurs după structura programelor universitare:
-
-```text
-Informatică - Licență
-├── Anul I
-├── Anul II
-└── Anul III
-
-IAST - Master
-├── Anul I
-└── Anul II
-```
-
-Disciplinele din această hartă vor trimite către capitolele relevante ale
-compendiului.
-
-Astfel, documentul poate fi folosit atît ca lucrare de referință organizată pe
-domenii, cît și pentru urmărirea materiei unei anumite discipline.
-
-## Conținut
-
-În funcție de subiect, compendiul poate include:
-
-* definiții și rezultate teoretice;
-* demonstrații și deducții;
-* explicații și observații suplimentare;
-* exemple rezolvate;
-* algoritmi și pseudocod;
-* implementări și fragmente de cod;
-* exerciții și probleme;
-* materiale și observații de laborator;
-* recapitulări ale prerechizitelor;
-* legături între concepte și discipline;
-* trimiteri către alte capitole;
-* bibliografie și resurse pentru aprofundare.
-
-Conținutul nu este limitat strict la programa universitară. Pot fi incluse și
-subiecte suplimentare atunci cînd acestea contribuie la înțelegerea materiei,
-oferă context sau reprezintă o continuare naturală a acesteia.
-
-## Tehnologii
-
-Documentul este redactat în LaTeX și compilat cu LuaLaTeX.
-
-Metadatele curriculare și o parte din generarea structurii documentului sînt
-gestionate folosind Fennel, compilat în Lua pentru integrarea cu LuaLaTeX.
-
-Detaliile privind arhitectura proiectului, modelul curricular și DSL-ul Fennel
-sînt descrise în [`ARCHITECTURE.md`](ARCHITECTURE.md).
-
-## Compilare
-
-Procesul de build va include compilarea surselor Fennel și generarea
-documentului cu LuaLaTeX.
-
-Instrucțiunile exacte de compilare vor fi adăugate odată cu implementarea
-infrastructurii de build.
-
-## Surse
-
-Structura curriculară are la bază planurile de învățămînt și fișele
-disciplinelor publicate de Universitatea „Vasile Alecsandri” din Bacău.
-
-Conținutul poate fi completat folosind:
-
-* propriile notițe;
-* materiale de curs și laborator la care am avut acces în timpul studiilor;
-* materiale distribuite în perioada cursurilor desfășurate online;
-* cărți și articole de specialitate;
-* documentații tehnice;
-* alte surse bibliografice relevante;
-* exemple, explicații și exerciții proprii.
-
-Sursele externe sînt indicate și citate acolo unde este necesar.
-
-Materialele provenite din surse externe nu sînt relicențiate prin acest proiect
-și rămîn supuse drepturilor de autor, licențelor și condițiilor de utilizare ale
-surselor originale.
-
-## Contribuții
-
-Sînt binevenite corecturi, completări, exemple, surse și informații actualizate
-despre discipline.
-
-Instrucțiunile privind contribuțiile sînt disponibile în
-[`CONTRIBUTING.md`](CONTRIBUTING.md).
-
-## Statut
-
-Proiectul se află într-un stadiu incipient.
-
-În prezent, repository-ul conține documentația inițială și fișierele de licență.
-Structura LaTeX, infrastructura Fennel și conținutul propriu-zis vor fi adăugate
-treptat.
-
-Organizarea proiectului se poate modifica pe măsură ce materialul este
-dezvoltat.
+Textul original al proiectului folosește `î` și în interiorul cuvintelor.
+Denumirile oficiale și fragmentele citate din surse pot fi păstrate exact în
+forma în care apar acolo.
 
 ## Licență
 
-Proiectul folosește două licențe, în funcție de natura materialului.
+Textul original al proiectului este distribuit sub CC BY 4.0. Codul, macro-urile
+LaTeX, sursele Fennel și scripturile sînt distribuite sub 0BSD, dacă nu este
+precizat altfel.
 
-Conținutul original al compendiului, inclusiv textul, explicațiile, exercițiile
-și ilustrațiile proprii, este disponibil sub [Creative Commons Attribution 4.0
-International (CC BY 4.0)](./LICENSE-CC-BY), dacă nu este specificat altfel.
+Documentele externe arhivate în [`sources/`](sources/) nu reprezintă conținut
+original al proiectului și nu sînt acoperite de licențele CC BY 4.0 sau 0BSD ale
+compendiului.
 
-Codul sursă original, inclusiv exemplele de programare, macro-urile LaTeX,
-sursele Fennel, codul Lua, scripturile și celelalte componente software, este
-disponibil sub [BSD Zero Clause License (0BSD)](./LICENSE-0BSD), dacă nu este
-specificat altfel.
-
-Materialele și fragmentele de cod provenite din surse externe rămîn supuse
-licențelor și drepturilor autorilor lor originali.
-
-## Contact
-
-Dacă sînteți student și doriți să contribuiți cu materiale de curs sau de
-laborator ori să mă ajutați să mențin compendiul la zi cu ceea ce se predă în
-prezent, mă puteți contacta folosind următoarele identificatoare codificate în
-[ASCII85](https://cryptii.com/pipes/ascii85-decoding/):
-
-* Discord: `5]C.Q@ps1b@s%`
-* E-mail: `F*(i,ARfj@1dG\j@;0O1@rH2`
-
-Codificarea este folosită doar pentru a evita colectarea automată a adreselor de
-către scrapere simple.
-
-Sînt binevenite și materialele oferite direct de cadre didactice.
+Pentru contribuții, vedeți [`CONTRIBUTING.md`](CONTRIBUTING.md).
